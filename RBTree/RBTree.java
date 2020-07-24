@@ -1,3 +1,5 @@
+package RBTree;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -562,7 +564,7 @@ public class RBTree {
  
         System.out.println("开始输出树的Graphviz结构");
         ConcurrentHashMap<Integer, List<RBNode>> map = showTree();
-        int size = map.size();
+        // int size = map.size();
         System.out.println("digraph kunghsu{");
         for (int i = 0; i < map.size(); i++) {
             for (int j = 0; j < map.get(i).size(); j++) {
@@ -575,7 +577,7 @@ public class RBTree {
  
         for (int i = 0; i < map.size(); i++) {
             for (int j = 0; j < map.get(i).size(); j++) {
-                String content = "";
+                // String content = "";
  
                 if(map.get(i).get(j).key != null){
                     if(map.get(i).get(j).left != null){
