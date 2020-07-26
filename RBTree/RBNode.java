@@ -4,8 +4,8 @@ package RBTree;
  * 
  * @author zhouning
  */
-public class RBNode implements Comparable<RBNode>{
-    public static final boolean RED   = false;
+public class RBNode implements Comparable<RBNode> {
+    public static final boolean RED = false;
     public static final boolean BLACK = true;
 
     public Integer key;
@@ -14,7 +14,10 @@ public class RBNode implements Comparable<RBNode>{
     public RBNode parent;
     public RBNode left;
     public RBNode right;
-    public RBNode(){}
+
+    public RBNode() {
+    }
+
     public RBNode(Boolean col, Integer key, Integer data, RBNode parent, RBNode left, RBNode right) {
         this.color = col;
         this.key = key;
@@ -26,19 +29,13 @@ public class RBNode implements Comparable<RBNode>{
     }
 
     @Override
-    public int compareTo(RBNode rNode){
+    public int compareTo(RBNode rNode) {
         return Integer.compare(data, rNode.data);
     }
 
     @Override
     public java.lang.String toString() {
-        return "RBNode{" +
-                "key=" + key +
-                ", data=" + data +
-                ", color=" + color +
-                ", parent=" + parent +
-                ", left=" + left +
-                ", right=" + right +
-                '}';
+        return "RBNode{" + "key=" + key + ", data=" + data + ", color=" + color + ", parent=" + parent + ", left="
+                + left + ", right=" + right + '}';
     }
 }

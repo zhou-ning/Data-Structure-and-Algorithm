@@ -1,4 +1,5 @@
 package RBTree;
-enum Color{
-    Red,Black
+
+enum Color {
+    Red, Black
 }
