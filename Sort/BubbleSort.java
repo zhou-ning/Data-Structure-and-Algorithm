@@ -3,8 +3,7 @@ package Sort;
 import java.util.Arrays;
 
 /**
- * BubbleSort 
- * 冒泡排序
+ * BubbleSort 冒泡排序
  */
 public class BubbleSort {
     public static void bubbleSort(int[] data, int left, int right) {
@@ -12,7 +11,7 @@ public class BubbleSort {
             return;
         if (left < 0 || right < 0)
             return;
-        if (data.length < left || data.length < right)
+        if (data.length < left || data.length > right)
             return;
 
         int pass = left + 1;

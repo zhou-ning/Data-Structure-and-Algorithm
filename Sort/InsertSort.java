@@ -3,8 +3,7 @@ package Sort;
 import java.util.Arrays;
 
 /**
- * InsertSort 
- * 插入排序
+ * InsertSort 插入排序
  */
 public class InsertSort {
 
@@ -13,7 +12,7 @@ public class InsertSort {
             return;
         if (left < 0 || right < 0)
             return;
-        if (data.length < left || data.length < right)
+        if (data.length < left || data.length > right)
             return;
 
         int temp = 0, i = 0, j = 0;

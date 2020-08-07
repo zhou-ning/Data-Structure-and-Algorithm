@@ -12,7 +12,7 @@ public class ShellSort {
             return;
         if (left < 0 || right < 0)
             return;
-        if (data.length < left || data.length < right)
+        if (data.length < left || data.length > right)
             return;
 
         int i = 0, j = 0, gap = right - left + 1;
