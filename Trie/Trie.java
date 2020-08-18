@@ -1,7 +1,7 @@
 package Trie;
 
 /***
- * 字段树
+ * 字典树
  * 
  * @author zhouning
  * @since 2020-07-30
