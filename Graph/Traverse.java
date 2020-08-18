@@ -1,9 +1,11 @@
 package Graph;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 public class Traverse {
 
@@ -13,7 +15,7 @@ public class Traverse {
      * @param node
      * @param visited
      */
-    public void dfs(GraphNode node, List<GraphNode> visited) {
+    public void dfs(GraphNode node, Set<GraphNode> visited) {
         // 判断是否遍历过
         if (visited.contains(node)) {
             return;
@@ -33,7 +35,7 @@ public class Traverse {
      */
     public void bfs(GraphNode node) {
 
-        List<GraphNode> visited = new ArrayList<GraphNode>(); // 已经被访问过的元素
+        Set<GraphNode> visited = new HashSet<>(); // 已经被访问过的元素
         Queue<GraphNode> q = new LinkedList<GraphNode>(); // 用队列存放依次要遍历的元素
         q.offer(node);
 
@@ -78,7 +80,7 @@ public class Traverse {
         v5.addNeighbor(v4);
         Traverse t = new Traverse();
         System.out.println("深度优先遍历");
-        List<GraphNode> visited = new ArrayList<GraphNode>();
+        Set<GraphNode> visited = new HashSet<>();
         t.dfs(v0, visited);
         System.out.println("广度优先遍历");
         t.bfs(v0);
