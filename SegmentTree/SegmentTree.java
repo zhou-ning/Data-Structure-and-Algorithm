@@ -1,12 +1,26 @@
 package SegmentTree;
 
+import java.util.Arrays;
+
 /**
  * 线段树，叶子节点为数的值，非叶子节点为叶子节点的累加 SegmentTree
  */
 public class SegmentTree {
 
+    // 线段树节点
+    class Node {
+        int l, r;
+        int data;
+
+        @Override
+        public String toString() {
+            // TODO Auto-generated method stub
+            return String.valueOf(data);
+        }
+    };
+
     /*** tree为构建后的数组 */
-    int[] tree;
+    Node[] tree;
     /** nums为原数组 */
     int[] nums;
     /*** n为数组长度 */
@@ -17,25 +31,26 @@ public class SegmentTree {
      * 
      * @param nums
      */
-    public SegmentTree(int[] nums) {
-        if (nums.length > 0) {
-            n = nums.length;
-            tree = new int[n * 2];
-            buildTree(nums);
+    public SegmentTree(int[] arr) {
+        if (arr.length > 0) {
+            n = arr.length;
+            // 大小为n+1，下标从1开始
+            // 下标从1开始，左节点为 fa*2，右节点为 fa*2+1，方便计算
+            // 下标从1开始，0代表区间长度为0，也具有了实际意义
+            nums = new int[n + 1];
+            // 需要四倍大小
+            tree = new Node[n << 2];
+            for (int i = 0; i < tree.length; i++) {
+                tree[i] = new Node();
+            }
+            for (int i = 0; i < n; i++) {
+                nums[i + 1] = arr[i];
+            }
+            // 迭代建树
+            build(1, 1, n);
         }
-    }
-
-    /***
-     * 建树，使用迭代的方式
-     * 
-     * @param nums
-     */
-    private void buildTree(int[] nums) {
-        for (int i = n, j = 0; i < 2 * n; i++, j++)
-            tree[i] = nums[j];
-        for (int i = n - 1; i > 0; --i)
-            // tree[i] = tree[i * 2] + tree[i * 2 + 1];
-            Pushup(i);
+        System.out.println(Arrays.toString(nums));
+        System.out.println(Arrays.toString(tree));
     }
 
     /***
@@ -45,23 +60,27 @@ public class SegmentTree {
      * @param l 左子树下标
      * @param r 右子树下标
      */
-    private void buildTree(int k, int l, int r) {
+    private void build(int k, int l, int r) {
+        tree[k].l = l;
+        tree[k].r = r;
         if (l == r) {
-            tree[k] = nums[l];
+            tree[k].data = nums[l];
         } else {
             // m则为中间点，左儿子的结点区间为[l,m],右儿子的结点区间为[m+1,r]
             int m = l + ((r - l) >> 1);
             // l = fa*2 （左子树下标为父亲下标的两倍）
-            buildTree(k << 1, l, m); // 递归构造左儿子结点
+            build(k << 1, l, m); // 递归构造左儿子结点
             // r = fa*2+1（右子树下标为父亲下标的两倍+1）
-            buildTree(k << 1 | 1, m + 1, r); // 递归构造右儿子结点
-            Pushup(k);    //更新父节点
+            build(k << 1 | 1, m + 1, r); // 递归构造右儿子结点
+            // 进行 &运算
+            // tree[k].data = tree[k << 1].data + tree[k << 1 | 1].data;
+            Pushup(k);
         }
     }
 
     void Pushup(int k) {
         // 更新函数，这里是实现区间和 ，同理可以变成，最小值，最小值等
-        tree[k] = tree[k << 1] + tree[k << 1 | 1];
+        tree[k].data = tree[k << 1].data + tree[k << 1 | 1].data;
     }
 
     /****
@@ -70,49 +89,59 @@ public class SegmentTree {
      * @param pos
      * @param val
      */
-    void update(int pos, int val) {
-        pos += n;
-        tree[pos] = val;
-        while (pos > 0) {
-            int left = pos;
-            int right = pos;
-            if (pos % 2 == 0) {
-                right = pos + 1;
-            } else {
-                left = pos - 1;
-            }
-            // parent is updated after child is updated
-            tree[pos / 2] = tree[left] + tree[right];
-            pos /= 2;
-        }
+    public void update(int pos, int val) {
+        update(1, val, 1, n, pos);
+        System.out.println(Arrays.toString(nums));
+        System.out.println(Arrays.toString(tree));
     }
 
     /***
-     * 统计 l到r之间的值的和
+     * 递归进行修改
      * 
-     * @param l
-     * @param r
-     * @return
+     * @param k   tree的下标
+     * @param val 需要修改的值
+     * @param l   左边界
+     * @param r   右边界
+     * @param pos nums的下标
      */
-    public int sumRange(int l, int r) {
-        // get leaf with value 'l'
-        l += n;
-        // get leaf with value 'r'
-        r += n;
-        int sum = 0;
-        while (l <= r) {
-            if ((l % 2) == 1) {
-                sum += tree[l];
-                l++;
+    void update(int k, int val, int l, int r, int pos) {
+        if (l == r) {
+            tree[k].data = val;
+            nums[pos] = val;
+        } else {
+            int m = l + ((r - l) >> 1);
+            if (pos <= m) {
+                // 更新左半边pos
+                update(k << 1, val, l, m, pos);
+            } else {
+                update(k << 1 | 1, val, m + 1, r, pos);
             }
-            if ((r % 2) == 0) {
-                sum += tree[r];
-                r--;
-            }
-            l /= 2;
-            r /= 2;
+            Pushup(k);
         }
-        return sum;
+
+    }
+
+    // 查询,u为需要查询的下标,l,r为范围
+    int query(int k, int l, int r) {
+        if (l <= tree[k].l && r >= tree[k].r)
+            return tree[k].data;
+        int mid = tree[k].l + tree[k].r >> 1;
+        int ans = (1 << 30) - 1;
+        if (l <= mid)
+            ans = ans + (query(k << 1, l, r));
+        if (r > mid)
+            ans = ans + (query(k << 1 | 1, l, r));
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = { 1, 3, 5, 7, 9 };
+        SegmentTree tree = new SegmentTree(arr);
+        // 查询 位置1：9
+        System.out.println(tree.query(1, 1, 5));
+        tree.update(3, 4);
+        System.out.println(tree.query(1, 1, 5));
+
     }
 
 }
